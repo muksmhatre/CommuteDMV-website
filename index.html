@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CommuteDMV LLC</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+}
+header {
+    background: #0a4d8c;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+.container {
+    padding: 20px;
+    text-align: center;
+}
+button {
+    background: #0a4d8c;
+    color: white;
+    padding: 15px;
+    width: 100%;
+    max-width: 300px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+}
+button:active {
+    transform: scale(0.98);
+}
+
+/* Modal mobile optimized */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+.modal-content {
+    background: white;
+    margin: auto;
+    margin-top: 10%;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+}
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Success message */
+.success {
+    display: none;
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.close {
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>CommuteDMV LLC</h1>
+    <p>Smart, Affordable & Eco-Friendly Vanpooling</p>
+</header>
+
+<div class="container">
+    <h2>Join Our Vanpool</h2>
+    <button onclick="openModal()">Join a Vanpool</button>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Join a Vanpool</h2>
+
+    <form id="leadForm">
+        <input id="name" placeholder="Full Name" required>
+        <input id="phone" placeholder="Phone Number" required>
+        <input id="start" placeholder="Start Location" required>
+        <input id="destination" placeholder="Destination" required>
+        <input id="workHours" placeholder="Preferred Work Hours" required>
+        <input id="timeline" placeholder="How soon to join?" required>
+
+        <button type="submit">Submit</button>
+        <div class="success" id="successMsg">✅ Submitted! We’ll contact you soon.</div>
+    </form>
+  </div>
+</div>
+
+<footer style="text-align:center; padding:20px; background:#222; color:white;">
+    <p>Email: Commutedmv@gmail.com</p>
+    <p>Phone: 571-210-1386</p>
+</footer>
+
+<script>
+// Modal
+function openModal() { document.getElementById("modal").style.display = "block"; }
+function closeModal() { document.getElementById("modal").style.display = "none"; }
+
+// Submit to Google Sheets
+document.getElementById("leadForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const data = {
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        start: document.getElementById("start").value,
+        destination: document.getElementById("destination").value,
+        workHours: document.getElementById("workHours").value,
+        timeline: document.getElementById("timeline").value
+    };
+
+    fetch("YOUR_SCRIPT_URL", {
+        method: "POST",
+        body: JSON.stringify(data)
+    }).then(() => {
+        document.getElementById("successMsg").style.display = "block";
+        document.getElementById("leadForm").reset();
+    });
+});
+
+// Google Maps Autocomplete
+function initAutocomplete() {
+    new google.maps.places.Autocomplete(document.getElementById("start"));
+    new google.maps.places.Autocomplete(document.getElementById("destination"));
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initAutocomplete" async defer></script>
+
+</body>
+</html>
